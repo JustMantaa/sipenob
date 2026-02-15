@@ -29,6 +29,11 @@ class Obat extends Model
         return $this->belongsTo(RelasionalObat::class);
     }
 
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class, 'obat_supplier');
+    }
+
     public function pembelianDetails()
     {
         return $this->hasMany(PembelianDetail::class);

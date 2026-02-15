@@ -43,7 +43,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/relasional-obat/{id}/edit', [RelasionalObatController::class, 'edit']);
         Route::put('/relasional-obat/{id}', [RelasionalObatController::class, 'update']);
         Route::delete('/relasional-obat/{id}', [RelasionalObatController::class, 'destroy']);
-        Route::get('/relasional-obat', [RelasionalObatController::class, 'index']);
 
         // Obat (admin full access)
         Route::get('/obat/create', [ObatController::class, 'create']);
@@ -58,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit']);
         Route::put('/supplier/{id}', [SupplierController::class, 'update']);
         Route::delete('/supplier/{id}', [SupplierController::class, 'destroy']);
-        Route::get('/supplier', [SupplierController::class, 'index']);
 
         // User (petugas)
         Route::get('/user/create', [UserController::class, 'create']);
@@ -71,8 +69,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin & Petugas routes
     Route::middleware(['role:admin,petugas'])->group(function () {
+        // Kategori Obat (read only for petugas)
+        Route::get('/relasional-obat', [RelasionalObatController::class, 'index']);
+
         // Obat (read only for petugas)
         Route::get('/obat', [ObatController::class, 'index']);
+
+        // Supplier (read only for petugas)
+        Route::get('/supplier', [SupplierController::class, 'index']);
 
         // Pelanggan
         Route::get('/pelanggan/create', [PelangganController::class, 'create']);

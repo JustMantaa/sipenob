@@ -29,7 +29,7 @@
                     <td class="border border-slate-300 px-4 py-2">{{ $penjualan->no_nota }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $penjualan->tanggal_penjualan->format('d/m/Y') }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $penjualan->pelanggan->nama_pelanggan ?? 'Umum' }}</td>
-                    <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ number_format($penjualan->total_penjualan, 0, ',', '.') }}</td>
+                    <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ $penjualan->total_penjualan }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $penjualan->user->name }}</td>
                     <td class="border border-slate-300 px-4 py-2 text-center">
                         <a href="/penjualan/{{ $penjualan->id }}" class="text-blue-600 hover:underline">Detail</a>

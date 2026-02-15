@@ -35,6 +35,7 @@
             </div>
         </div>
 
+
         <div class="mb-4">
             <label class="block text-slate-700 font-semibold mb-2">Nama Obat</label>
             <input type="text" name="nama_obat" value="{{ old('nama_obat') }}" required 

@@ -20,4 +20,9 @@ class Supplier extends Model
     {
         return $this->hasMany(Pembelian::class);
     }
+
+    public function obats()
+    {
+        return $this->belongsToMany(Obat::class, 'obat_supplier');
+    }
 }

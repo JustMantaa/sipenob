@@ -11,7 +11,7 @@ class ObatController extends Controller
 {
     public function index()
     {
-        $obats = Obat::with('relasionalObat')->orderBy('kode_obat')->get();
+        $obats = Obat::with(['relasionalObat', 'suppliers'])->orderBy('kode_obat')->get();
         return view('obat.index', compact('obats'));
     }
 
@@ -43,6 +43,7 @@ class ObatController extends Controller
     {
         $obat = Obat::findOrFail($id);
         $kategoris = RelasionalObat::orderBy('nama_kategori')->get();
+        $obat->load('suppliers');
         return view('obat.edit', compact('obat', 'kategoris'));
     }
 
@@ -73,4 +74,5 @@ class ObatController extends Controller
 
         return redirect('/obat')->with('success', 'Data obat berhasil dihapus.');
     }
+
 }

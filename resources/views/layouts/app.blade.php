@@ -62,7 +62,35 @@
                             </li>
                             <li>
                                 <a href="/user" class="block px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
-                                    User
+                                    Petugas
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    @endif
+
+                    @if(auth()->user()->isPetugas())
+                    <li>
+                        <div class="text-xs font-semibold text-blue-300 px-4 py-2 mt-4 mb-2">DATA</div>
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="/relasional-obat" class="block px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+                                    Kategori Obat
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/obat" class="block px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+                                    Data Obat
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/supplier" class="block px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+                                    Supplier
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/pelanggan" class="block px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+                                    Pelanggan
                                 </a>
                             </li>
                         </ul>
@@ -133,5 +161,52 @@
         @yield('content')
     </main>
     @endguest
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tables = document.querySelectorAll('table');
+            tables.forEach((table) => {
+                if (table.dataset.searchReady === 'true') {
+                    return;
+                }
+                if (table.getAttribute('data-search') === 'false') {
+                    return;
+                }
+
+                table.dataset.searchReady = 'true';
+
+                const searchWrapper = document.createElement('div');
+                searchWrapper.className = 'flex items-center justify-end mb-3';
+
+                const searchInput = document.createElement('input');
+                searchInput.type = 'search';
+                searchInput.placeholder = 'Cari di tabel...';
+                searchInput.className = 'border border-slate-300 rounded px-3 py-2 text-sm w-full sm:w-64';
+
+                searchWrapper.appendChild(searchInput);
+                table.parentNode.insertBefore(searchWrapper, table);
+
+                const getRows = () => {
+                    const bodyRows = Array.from(table.querySelectorAll('tbody tr'));
+                    if (bodyRows.length > 0) {
+                        return bodyRows;
+                    }
+                    return Array.from(table.querySelectorAll('tr')).filter((row) => {
+                        return row.closest('thead') === null && row.closest('tfoot') === null;
+                    });
+                };
+
+                const rows = getRows();
+
+                searchInput.addEventListener('input', () => {
+                    const term = searchInput.value.toLowerCase().trim();
+                    rows.forEach((row) => {
+                        const rowText = row.textContent.toLowerCase();
+                        row.style.display = term === '' || rowText.includes(term) ? '' : 'none';
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

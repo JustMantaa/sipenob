@@ -45,15 +45,15 @@
                 <td class="border border-slate-300 px-4 py-2 text-center">{{ $loop->iteration }}</td>
                 <td class="border border-slate-300 px-4 py-2">{{ $detail->obat->nama_obat }}</td>
                 <td class="border border-slate-300 px-4 py-2 text-center">{{ $detail->jumlah }}</td>
-                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ number_format($detail->harga_jual, 0, ',', '.') }}</td>
-                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</td>
+                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ $detail->harga_jual }}</td>
+                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ $detail->subtotal }}</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr class="bg-slate-100 font-bold">
                 <td colspan="4" class="border border-slate-300 px-4 py-2 text-right">TOTAL</td>
-                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ number_format($penjualan->total_penjualan, 0, ',', '.') }}</td>
+                <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ $penjualan->total_penjualan }}</td>
             </tr>
         </tfoot>
     </table>

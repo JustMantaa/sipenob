@@ -29,7 +29,7 @@
                     <td class="border border-slate-300 px-4 py-2">{{ $pembelian->no_faktur }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $pembelian->tanggal_pembelian->format('d/m/Y') }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $pembelian->supplier->nama_supplier }}</td>
-                    <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ number_format($pembelian->total_pembelian, 0, ',', '.') }}</td>
+                    <td class="border border-slate-300 px-4 py-2 text-right">Rp {{ $pembelian->total_pembelian }}</td>
                     <td class="border border-slate-300 px-4 py-2">{{ $pembelian->user->name }}</td>
                     <td class="border border-slate-300 px-4 py-2 text-center">
                         <a href="/pembelian/{{ $pembelian->id }}" class="text-blue-600 hover:underline">Detail</a>

@@ -36,6 +36,21 @@
             </div>
         </div>
 
+        <div class="mb-6">
+            <label class="block text-slate-700 font-semibold mb-2">Obat yang Disuplai</label>
+            <div class="border border-slate-300 rounded p-3 max-h-64 overflow-y-auto">
+                @forelse($obats as $obat)
+                <label class="flex items-center gap-2 mb-2">
+                    <input type="checkbox" name="obat_ids[]" value="{{ $obat->id }}"
+                        {{ in_array($obat->id, old('obat_ids', $selectedObatIds)) ? 'checked' : '' }}>
+                    <span>{{ $obat->nama_obat }} ({{ $obat->relasionalObat->nama_kategori ?? '-' }})</span>
+                </label>
+                @empty
+                <div class="text-slate-500 text-sm">Belum ada data obat.</div>
+                @endforelse
+            </div>
+        </div>
+
         <div class="flex space-x-2">
             <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Update</button>
             <a href="/supplier" class="bg-slate-300 text-slate-700 px-6 py-2 rounded hover:bg-slate-400">Batal</a>

@@ -19,6 +19,7 @@
                 <tr class="bg-slate-200">
                     <th class="border border-slate-300 px-2 py-2">Kode</th>
                     <th class="border border-slate-300 px-2 py-2">Nama Obat</th>
+                    <th class="border border-slate-300 px-2 py-2">Supplier</th>
                     <th class="border border-slate-300 px-2 py-2">Kategori</th>
                     <th class="border border-slate-300 px-2 py-2">Stok</th>
                     <th class="border border-slate-300 px-2 py-2">Harga Beli</th>
@@ -34,10 +35,17 @@
                 <tr>
                     <td class="border border-slate-300 px-2 py-2">{{ $obat->kode_obat }}</td>
                     <td class="border border-slate-300 px-2 py-2">{{ $obat->nama_obat }}</td>
+                    <td class="border border-slate-300 px-2 py-2">
+                        @if($obat->suppliers->isEmpty())
+                            <span class="text-slate-500">-</span>
+                        @else
+                            {{ $obat->suppliers->pluck('nama_supplier')->implode(', ') }}
+                        @endif
+                    </td>
                     <td class="border border-slate-300 px-2 py-2">{{ $obat->relasionalObat->nama_kategori }}</td>
                     <td class="border border-slate-300 px-2 py-2 text-center">{{ $obat->stok }}</td>
-                    <td class="border border-slate-300 px-2 py-2 text-right">{{ number_format($obat->harga_beli, 0, ',', '.') }}</td>
-                    <td class="border border-slate-300 px-2 py-2 text-right">{{ number_format($obat->harga_jual, 0, ',', '.') }}</td>
+                    <td class="border border-slate-300 px-2 py-2 text-right">Rp {{ $obat->harga_beli }}</td>
+                    <td class="border border-slate-300 px-2 py-2 text-right">Rp {{ $obat->harga_jual }}</td>
                     <td class="border border-slate-300 px-2 py-2 text-center">{{ $obat->tanggal_kadaluarsa ? $obat->tanggal_kadaluarsa->format('d/m/Y') : '-' }}</td>
                     @if(auth()->user()->isAdmin())
                     <td class="border border-slate-300 px-2 py-2 text-center">
@@ -52,7 +60,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="border border-slate-300 px-4 py-2 text-center text-slate-500">Belum ada data obat</td>
+                    <td colspan="{{ auth()->user()->isAdmin() ? 9 : 8 }}" class="border border-slate-300 px-4 py-2 text-center text-slate-500">Belum ada data obat</td>
                 </tr>
                 @endforelse
             </tbody>

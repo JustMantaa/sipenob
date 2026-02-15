@@ -17,7 +17,7 @@
 
             <div>
                 <label class="block text-slate-700 font-semibold mb-2">Supplier</label>
-                <select name="supplier_id" required 
+                <select name="supplier_id" id="supplierSelect" required 
                     class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500">
                     <option value="">Pilih Supplier</option>
                     @foreach($suppliers as $supplier)
@@ -44,7 +44,7 @@
                         <select name="obat_id[]" required class="obat-select w-full px-4 py-2 border border-slate-300 rounded">
                             <option value="">Pilih Obat</option>
                             @foreach($obats as $obat)
-                            <option value="{{ $obat->id }}" data-harga="{{ $obat->harga_beli }}">
+                            <option value="{{ $obat->id }}" data-harga="{{ $obat->harga_beli }}" data-supplier-ids="{{ $obat->suppliers->pluck('id')->implode(',') }}">
                                 {{ $obat->nama_obat }} ({{ $obat->relasionalObat->nama_kategori }})
                             </option>
                             @endforeach
@@ -56,7 +56,8 @@
                     </div>
                     <div class="col-span-2">
                         <label class="block text-slate-700 font-semibold mb-2">Harga Beli</label>
-                        <input type="number" name="harga_beli[]" required min="0" step="0.01" class="harga-input w-full px-4 py-2 border border-slate-300 rounded">
+                        <input type="number" name="harga_beli[]" required min="0" step="0.01" readonly 
+                            class="harga-input w-full px-4 py-2 border border-slate-300 rounded bg-slate-100">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-slate-700 font-semibold mb-2">Subtotal</label>
@@ -89,6 +90,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('detailContainer');
+    const supplierSelect = document.getElementById('supplierSelect');
     
     // Calculate subtotal and grand total
     function calculateTotals() {
@@ -106,6 +108,38 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('grandTotal').textContent = grandTotal.toLocaleString('id-ID');
     }
     
+    function filterObatOptions(supplierId) {
+        document.querySelectorAll('.obat-select').forEach((select) => {
+            const options = Array.from(select.options);
+            options.forEach((option) => {
+                if (!option.value) {
+                    option.hidden = false;
+                    option.disabled = false;
+                    return;
+                }
+                const optionSuppliers = option.dataset.supplierIds || '';
+                const supplierList = optionSuppliers === '' ? [] : optionSuppliers.split(',');
+                const match = !supplierId || supplierList.includes(String(supplierId));
+                option.hidden = !match;
+                option.disabled = !match;
+            });
+
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption && selectedOption.value && selectedOption.disabled) {
+                select.value = '';
+                const row = select.closest('.detail-row');
+                row.querySelector('.harga-input').value = '';
+                row.querySelector('.subtotal-display').value = '';
+            }
+        });
+
+        calculateTotals();
+    }
+
+    supplierSelect.addEventListener('change', function() {
+        filterObatOptions(this.value);
+    });
+
     // Event delegation for obat selection
     container.addEventListener('change', function(e) {
         if (e.target.classList.contains('obat-select')) {
@@ -119,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event delegation for input changes
     container.addEventListener('input', function(e) {
-        if (e.target.classList.contains('jumlah-input') || e.target.classList.contains('harga-input')) {
+        if (e.target.classList.contains('jumlah-input')) {
             calculateTotals();
         }
     });
@@ -149,10 +183,12 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.querySelector('.subtotal-display').value = '';
         
         container.appendChild(newRow);
+        filterObatOptions(supplierSelect.value);
         calculateTotals();
     });
     
-    // Initial calculation
+    // Initial filter and calculation
+    filterObatOptions(supplierSelect.value);
     calculateTotals();
 });
 </script>

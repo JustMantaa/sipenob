@@ -38,6 +38,18 @@
         </div>
 
         <div class="mb-4">
+            <label class="block text-slate-700 font-semibold mb-2">Supplier</label>
+            <div class="w-full px-4 py-2 border border-slate-300 rounded bg-slate-100">
+                @if($obat->suppliers->isEmpty())
+                    <span class="text-slate-500">-</span>
+                @else
+                    {{ $obat->suppliers->pluck('nama_supplier')->implode(', ') }}
+                @endif
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Supplier hanya bisa diubah melalui halaman edit supplier.</p>
+        </div>
+
+        <div class="mb-4">
             <label class="block text-slate-700 font-semibold mb-2">Nama Obat</label>
             <input type="text" name="nama_obat" value="{{ old('nama_obat', $obat->nama_obat) }}" required 
                 class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500">

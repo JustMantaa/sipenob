@@ -22,7 +22,7 @@ class PembelianController extends Controller
     public function create()
     {
         $suppliers = Supplier::orderBy('nama_supplier')->get();
-        $obats = Obat::with('relasionalObat')->orderBy('nama_obat')->get();
+        $obats = Obat::with(['relasionalObat', 'suppliers'])->orderBy('nama_obat')->get();
         
         // Generate nomor faktur
         $lastPembelian = Pembelian::latest('id')->first();
@@ -42,8 +42,6 @@ class PembelianController extends Controller
             'obat_id.*' => 'required|exists:obats,id',
             'jumlah' => 'required|array',
             'jumlah.*' => 'required|integer|min:1',
-            'harga_beli' => 'required|array',
-            'harga_beli.*' => 'required|numeric|min:0',
         ]);
 
         DB::beginTransaction();
@@ -62,7 +60,10 @@ class PembelianController extends Controller
             // Buat detail pembelian dan update stok
             foreach ($validated['obat_id'] as $index => $obatId) {
                 $jumlah = $validated['jumlah'][$index];
-                $hargaBeli = $validated['harga_beli'][$index];
+                $obat = Obat::whereHas('suppliers', function ($query) use ($validated) {
+                    $query->where('suppliers.id', $validated['supplier_id']);
+                })->findOrFail($obatId);
+                $hargaBeli = $obat->harga_beli;
                 $subtotal = $jumlah * $hargaBeli;
 
                 PembelianDetail::create([
@@ -74,7 +75,6 @@ class PembelianController extends Controller
                 ]);
 
                 // Update stok obat
-                $obat = Obat::find($obatId);
                 $obat->increment('stok', $jumlah);
 
                 $totalPembelian += $subtotal;

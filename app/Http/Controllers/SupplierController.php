@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Obat;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        $suppliers = Supplier::orderBy('nama_supplier')->get();
+        $suppliers = Supplier::with('obats')->orderBy('nama_supplier')->get();
         return view('supplier.index', compact('suppliers'));
     }
 
@@ -35,7 +36,10 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $supplier = Supplier::findOrFail($id);
-        return view('supplier.edit', compact('supplier'));
+        $obats = Obat::with('relasionalObat')->orderBy('nama_obat')->get();
+        $selectedObatIds = $supplier->obats()->pluck('obats.id')->toArray();
+
+        return view('supplier.edit', compact('supplier', 'obats', 'selectedObatIds'));
     }
 
     public function update(Request $request, $id)
@@ -47,9 +51,14 @@ class SupplierController extends Controller
             'alamat' => 'nullable|string',
             'telepon' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
+            'obat_ids' => 'nullable|array',
+            'obat_ids.*' => 'exists:obats,id',
         ]);
 
         $supplier->update($validated);
+
+        $selectedObatIds = $validated['obat_ids'] ?? [];
+        $supplier->obats()->sync($selectedObatIds);
 
         return redirect('/supplier')->with('success', 'Data supplier berhasil diperbarui.');
     }
