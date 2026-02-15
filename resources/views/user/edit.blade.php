@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6">Edit User Petugas</h1>
+    <h1 class="text-2xl font-bold mb-6">Edit Petugas</h1>
 
     <form action="/user/{{ $user->id }}" method="POST">
         @csrf

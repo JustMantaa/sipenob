@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Data User')
+@section('title', 'Data Petugas')
 
 @section('content')
 <div class="bg-white p-6 rounded-lg shadow">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">Data User Petugas</h1>
+        <h1 class="text-2xl font-bold">Data Petugas</h1>
         <a href="/user/create" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Tambah User
         </a>
