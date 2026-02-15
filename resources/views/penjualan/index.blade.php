@@ -19,7 +19,7 @@
                     <th class="border border-slate-300 px-4 py-2">Tanggal</th>
                     <th class="border border-slate-300 px-4 py-2">Pelanggan</th>
                     <th class="border border-slate-300 px-4 py-2">Total</th>
-                    <th class="border border-slate-300 px-4 py-2">Kasir</th>
+                    <th class="border border-slate-300 px-4 py-2">Petugas</th>
                     <th class="border border-slate-300 px-4 py-2">Aksi</th>
                 </tr>
             </thead>
